@@ -418,7 +418,7 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
 
         String action = intent.getAction();
         String url = intent.getStringExtra(Intent.EXTRA_TEXT);
-        String favoriteURL = sp.getString("favoriteURL", "https://github.com/scoute-dich/browser");
+        String favoriteURL = sp.getString("favoriteURL", "https://m.guancha.cn/");
 
         if ("".equals(action)) {
             Log.i(TAG, "resumed FOSS browser");
@@ -429,17 +429,17 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
             filePathCallback = null;
             getIntent().setAction("");
         } else if (!favoriteURL.isEmpty() && "sc_history".equals(action)) {
-            addAlbum(getString(R.string.app_name), sp.getString("favoriteURL", "https://github.com/scoute-dich/browser"), true);
+            addAlbum(getString(R.string.app_name), sp.getString("favoriteURL", "https://m.guancha.cn/"), true);
             showOverview();
             open_history.performClick();
             getIntent().setAction("");
         } else if (!favoriteURL.isEmpty() && "sc_bookmark".equals(action)) {
-            addAlbum(getString(R.string.app_name), sp.getString("favoriteURL", "https://github.com/scoute-dich/browser"), true);
+            addAlbum(getString(R.string.app_name), sp.getString("favoriteURL", "https://m.guancha.cn/"), true);
             showOverview();
             open_bookmark.performClick();
             getIntent().setAction("");
         } else if (!favoriteURL.isEmpty() && "sc_startPage".equals(action)) {
-            addAlbum(getString(R.string.app_name), sp.getString("favoriteURL", "https://github.com/scoute-dich/browser"), true);
+            addAlbum(getString(R.string.app_name), sp.getString("favoriteURL", "https://m.guancha.cn/"), true);
             showOverview();
             open_startPage.performClick();
             getIntent().setAction("");
@@ -451,7 +451,7 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
             addAlbum(getString(R.string.app_name), data, true);
             getIntent().setAction("");
         } else if (!favoriteURL.isEmpty() && BrowserContainer.size() < 1) {
-            addAlbum(getString(R.string.app_name), sp.getString("favoriteURL", "https://github.com/scoute-dich/browser"), true);
+            addAlbum(getString(R.string.app_name), sp.getString("favoriteURL", "https://m.guancha.cn/"), true);
             getIntent().setAction("");
         } else if (BrowserContainer.size() < 1) {
             addAlbum(getString(R.string.app_name), "about:blank", true);
@@ -1573,7 +1573,7 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
         updateOmnibox();
         omniboxRefresh = view.findViewById(R.id.menu_refresh);
 
-        if (ninjaWebView.getUrl().startsWith("https://")) {
+        if (url!=null && url.startsWith("https://")) {
             omniboxRefresh.setImageResource(R.drawable.icon_refresh);
         } else {
             omniboxRefresh.setImageResource(R.drawable.icon_alert);

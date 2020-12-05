@@ -26,6 +26,7 @@
         android:largeHeap="true"
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network"
         android:fullBackupContent="@xml/backup_descriptor"
         tools:ignore="UnusedAttribute">
 

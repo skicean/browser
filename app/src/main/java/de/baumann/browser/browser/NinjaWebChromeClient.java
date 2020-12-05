@@ -2,15 +2,16 @@ package de.baumann.browser.browser;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.Message;
 import android.view.View;
 import android.webkit.*;
-
 import de.baumann.browser.unit.HelperUnit;
 import de.baumann.browser.view.NinjaWebView;
 
 public class NinjaWebChromeClient extends WebChromeClient {
 
     private final NinjaWebView ninjaWebView;
+    private NinjaWebView newWebView = null;
 
     public NinjaWebChromeClient(NinjaWebView ninjaWebView) {
         super();
@@ -53,5 +54,36 @@ public class NinjaWebChromeClient extends WebChromeClient {
         HelperUnit.grantPermissionsLoc(activity);
         callback.invoke(origin, true, false);
         super.onGeolocationPermissionsShowPrompt(origin, callback);
+    }
+
+    @Override
+
+    public boolean onCreateWindow(WebView view, boolean dialog, boolean userGesture, Message resultMsg) {
+
+        newWebView = new NinjaWebView(view.getContext());
+        view.addView(newWebView);
+        WebSettings settings = newWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        //这个setWebViewClient要加上，否则window.open弹出浏览器打开。
+
+        newWebView.setWebViewClient(new NinjaWebViewClient(newWebView));
+        newWebView.setWebChromeClient(this);
+
+        WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+        transport.setWebView(newWebView);
+        resultMsg.sendToTarget();
+        return true;
+
+    }
+
+    @Override
+    public void onCloseWindow(WebView view) {
+
+        if (newWebView != null) {
+            newWebView.setVisibility(View.GONE);
+            view.removeView(newWebView);
+
+        }
+
     }
 }

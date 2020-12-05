@@ -127,23 +127,28 @@ public class NinjaWebView extends WebView implements AlbumController {
         webSettings.setSupportZoom(true);
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
+        webSettings.setSupportMultipleWindows(true);
 
         if (android.os.Build.VERSION.SDK_INT >= 26) {
-            webSettings.setSafeBrowsingEnabled(true);
+            webSettings.setSafeBrowsingEnabled(false);
         }
         if (!userAgent.isEmpty()) {
             webSettings.setUserAgentString(userAgent);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
         webViewClient.enableAdBlock(sp.getBoolean(context.getString(R.string.sp_ad_block), true));
         webSettings.setTextZoom(Integer.parseInt(Objects.requireNonNull(sp.getString("sp_fontSize", "100"))));
         webSettings.setAllowFileAccessFromFileURLs(sp.getBoolean(("sp_remote"), false));
         webSettings.setAllowUniversalAccessFromFileURLs(sp.getBoolean(("sp_remote"), false));
-        webSettings.setDomStorageEnabled(sp.getBoolean(("sp_remote"), false));
+        webSettings.setDomStorageEnabled(sp.getBoolean(("sp_remote"), true));
         webSettings.setBlockNetworkImage(!sp.getBoolean(context.getString(R.string.sp_images), true));
         webSettings.setJavaScriptEnabled(sp.getBoolean(context.getString(R.string.sp_javascript), true));
         webSettings.setJavaScriptCanOpenWindowsAutomatically(sp.getBoolean(context.getString(R.string.sp_javascript), true));
         webSettings.setGeolocationEnabled(sp.getBoolean(context.getString(R.string.sp_location), false));
+
     }
 
     private synchronized void initAlbum() {
@@ -187,6 +192,10 @@ public class NinjaWebView extends WebView implements AlbumController {
         }
 
         super.loadUrl(BrowserUnit.queryWrapper(context, url.trim()), getRequestHeaders());
+    }
+
+    public synchronized void loadJs(String js) {
+        super.loadUrl("javascript:" + js);
     }
 
     @Override
